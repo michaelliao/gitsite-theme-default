@@ -315,27 +315,11 @@
                                 <div class="gsc-popup-menu-container hidden left-0">
                                     <ul>
                                         {% for nav in site.navigation %}
-                                        {% if nav.type == 'book' %}
                                         <li class="block">
-                                            <a href="/books/{{ nav.ref }}/index.html">{{ nav.title }}</a>
-                                        </li>
-                                        {% elif nav.type == 'page' %}
-                                        <li class="block">
-                                            <a href="/pages/{{ nav.ref }}/index.html">{{ nav.title }}</a>
-                                        </li>
-                                        {% elif nav.type == 'blog' %}
-                                        <li class="block">
-                                            <a href="/blogs/index.html">{{ nav.title }}</a>
-                                        </li>
-                                        {% elif nav.type == 'link' %}
-                                        <li class="block">
-                                            <a href="{{ nav.ref }}" {% if nav.external %} target="_blank" {% endif %}>
+                                            <a href="{{ nav.uri }}" {% if nav.external %} target="_blank" {% endif %}>
                                                 {{ nav.title }}
                                             </a>
                                         </li>
-                                        {% else %}
-                                        <li class="block"><a href="#0">INVALID {{ nav.type }}</a></li>
-                                        {% endif %}
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -359,27 +343,11 @@
                             <!-- nav menu -->
                             {% if site.navigation %}
                             {% for nav in site.navigation %}
-                            {% if nav.type == 'book' %}
                             <li class="gsc-nav-li mr-4">
-                                <a href="/books/{{ nav.ref }}/index.html">{{ nav.title }}</a>
-                            </li>
-                            {% elif nav.type == 'page' %}
-                            <li class="gsc-nav-li mr-4">
-                                <a href="/pages/{{ nav.ref }}/index.html">{{ nav.title }}</a>
-                            </li>
-                            {% elif nav.type == 'blog' %}
-                            <li class="gsc-nav-li mr-4">
-                                <a href="/blogs/index.html">{{ nav.title }}</a>
-                            </li>
-                            {% elif nav.type == 'link' %}
-                            <li class="gsc-nav-li mr-4">
-                                <a href="{{ nav.ref }}" {% if nav.external %} target="_blank" {% endif %}>
+                                <a href="{{ nav.uri }}" {% if nav.external %} target="_blank" {% endif %}>
                                     {{ nav.title }}
                                 </a>
                             </li>
-                            {% else %}
-                            <li class="gsc-nav-li mr-4"><a href="#0">ERROR: INVALID {{ nav.type }}</a></li>
-                            {% endif %}
                             {% endfor %}
                             {% endif %}
 
@@ -395,27 +363,11 @@
                                 <div class="gsc-popup-menu-container hidden right-0">
                                     <ul>
                                         {% for nav in site.navigation %}
-                                        {% if nav.type == 'book' %}
                                         <li class="block">
-                                            <a href="/books/{{ nav.ref }}/index.html">{{ nav.title }}</a>
-                                        </li>
-                                        {% elif nav.type == 'page' %}
-                                        <li class="block">
-                                            <a href="/pages/{{ nav.ref }}/index.html">{{ nav.title }}</a>
-                                        </li>
-                                        {% elif nav.type == 'blog' %}
-                                        <li class="block">
-                                            <a href="/blogs/index.html">{{ nav.title }}</a>
-                                        </li>
-                                        {% elif nav.type == 'link' %}
-                                        <li class="block">
-                                            <a href="{{ nav.ref }}" {% if nav.external %} target="_blank" {% endif %}>
+                                            <a href="{{ nav.uri }}" {% if nav.external %} target="_blank" {% endif %}>
                                                 {{ nav.title }}
                                             </a>
                                         </li>
-                                        {% else %}
-                                        <li class="block"><a href="#0">ERROR: INVALID {{ nav.type }}</a></li>
-                                        {% endif %}
                                         {% endfor %}
                                     </ul>
                                 </div>
