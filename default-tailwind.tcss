@@ -340,7 +340,7 @@ button[type=submit] {
     @apply p-0 border-0 bg-transparent;
     font-family: JetBrainsMono;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 19px;
 }
 
 #gsi-content pre.ascii>code {
