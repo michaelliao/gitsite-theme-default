@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="{{ site.language }}">
 
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,7 +31,7 @@
     <style>
         @font-face {
             font-family: "JetBrainsMono";
-            src: url("/static/JetBrainsMono-Regular.woff2");
+            src: url("https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/fonts/webfonts/JetBrainsMono-Regular.woff2");
         }
     </style>
 
@@ -266,7 +265,7 @@
             resizeNavigationMenu();
         });
     </script>
-    <script src="/static/abcjs-basic.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.2.0/dist/abcjs-basic-min.js"></script>
     <script src="/static/abcjs-init.js"></script>
     {% block script %}
     {% endblock %}
@@ -493,7 +492,7 @@
             }, 500));
         };
     </script>
-    <script src="/static/flexsearch.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
     <script src="/static/search-index.js?t={{ __timestamp__}}" defer></script>
 </body>
 
