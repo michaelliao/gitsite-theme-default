@@ -14,7 +14,7 @@
     <div id="gsi-chapter-prev-next" class="flex flex-row mt-4">
         <div id="gsi-chapter-prev" class="basis-1/2 mr-2 text-left">
             {% if chapter.prev %}
-            <a href="/books/{{ chapter.prev.uri }}/index.html"
+            <a href="{{ site.rootPath }}/books/{{ chapter.prev.uri }}/index.html"
                 onclick="gs_load_chapter('/books/{{ chapter.prev.uri }}/index.html',true);return false;"
                 class="inline-block my-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -28,7 +28,7 @@
         </div>
         <div id="gsi-chapter-next" class="basis-1/2 ml-2 text-right">
             {% if chapter.next %}
-            <a href="/books/{{ chapter.next.uri }}/index.html"
+            <a href="{{ site.rootPath }}/books/{{ chapter.next.uri }}/index.html"
                 onclick="gs_load_chapter('/books/{{ chapter.next.uri }}/index.html',true);return false;"
                 class="inline-block my-2">
                 {{ chapter.next.title }}

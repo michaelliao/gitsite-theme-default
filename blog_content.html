@@ -29,7 +29,7 @@
 <div id="gsi-blog-prev-next" class="flex flex-row mt-4">
     <div id="gsi-blog-prev" class="basis-1/2 text-left">
         {% if blog.prev %}
-        <a href="/blogs/{{ blog.prev.uri }}/index.html"
+        <a href="{{ site.rootPath }}/blogs/{{ blog.prev.uri }}/index.html"
             onclick="gs_load_blog('/blogs/{{ blog.prev.uri }}/index.html',true);return false;"
             class="inline-block my-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -43,7 +43,7 @@
     </div>
     <div id="gsi-blog-next" class="basis-1/2 text-right">
         {% if blog.next %}
-        <a href="/blogs/{{ blog.next.uri }}/index.html"
+        <a href="{{ site.rootPath }}/blogs/{{ blog.next.uri }}/index.html"
             onclick="gs_load_blog('/blogs/{{ blog.next.uri }}/index.html',true);return false;"
             class="inline-block my-2">
             {{ blog.next.title }}

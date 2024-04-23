@@ -17,9 +17,9 @@
         console.log(`set chapter: ${old_uri} => ${uri}`);
         if (old_uri) {
             // dynamic load part of page:
-            document.querySelector(`#gsi-index a[href="${old_uri}"]`).classList.remove('gsc-active');
+            document.querySelector(`#gsi-index a[href="{{ site.rootPath }}${old_uri}"]`).classList.remove('gsc-active');
         }
-        const a = document.querySelector(`#gsi-index a[href="${uri}"]`);
+        const a = document.querySelector(`#gsi-index a[href="{{ site.rootPath }}${uri}"]`);
         a.classList.add('gsc-active');
         // set new current uri:
         window.gs_status.current_blog_uri = uri;
@@ -36,7 +36,7 @@
         gs_set_current_blog_uri(uri);
         if (shouldPushState) {
             console.log(`push state: ${uri}`);
-            history.pushState({}, '', uri);
+            history.pushState({}, '', `{{ site.rootPath }}${uri}`);
         }
         console.log(`try load new chapter: ${uri}`);
         if (window.gs_status.show_offcanvas) {
@@ -59,7 +59,7 @@
     async function gs_load_blog_content(uri) {
         // load /blogs/<uri>/content.html:
         let chapter_uri = uri.substring(0, uri.length - 'index.html'.length) + 'content.html';
-        let resp = await fetch(chapter_uri);
+        let resp = await fetch(`{{ site.rootPath }}${chapter_uri}`);
         if (resp.status === 200) {
             return await resp.text();
         }
@@ -74,7 +74,7 @@
                 <time datetime="{{ blog.date }}"></time>
             </span>
         </div>
-        <a href="/blogs/{{ blog.uri }}/index.html"
+        <a href="{{ site.rootPath }}/blogs/{{ blog.uri }}/index.html"
             onclick="gs_load_blog('/blogs/{{ blog.uri }}/index.html',true);return false;">
             <span class="gsc-index-item-title">{{ blog.title }}</span>
         </a>
@@ -87,10 +87,10 @@
         dom.innerHTML = new Date(dom.getAttribute('datetime')).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
     });
 
-    gs_set_current_blog_uri(location.pathname);
+    gs_set_current_blog_uri(location.pathname.substring('{{ site.rootPath }}'.length));
     window.onpopstate = function (e) {
-        console.log(`popstate: ${location.pathname}`);
-        gs_load_blog(location.pathname);
+        console.log(`pop state: ${location.pathname}`);
+        gs_load_blog(location.pathname.substring('{{ site.rootPath }}'.length));
     }
 </script>
 <!--// sidebar: blog index -->
