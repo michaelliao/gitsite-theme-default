@@ -4,10 +4,17 @@
 <div class="mb-4"></div>
 <div id="disqus_thread"></div>
 <script>
+    let disqus_pathname = function () {
+        let p = location.pathname;
+        if (p.endsWith('/')) {
+            p = p + 'index.html';
+        }
+        return p;
+    };
     var disqus_config = function () {
         let prefix = '{{ site.rootPath }}';
         this.page.url = location.href.substring(prefix.length);
-        this.page.identifier = location.pathname;
+        this.page.identifier = disqus_pathname();
     };
     (function () {
         var d = document, s = d.createElement('script');

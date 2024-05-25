@@ -3,6 +3,14 @@
     window.gs_status.current_chapter_uri = null;
     window.gs_status.current_chapter_version = 0;
 
+    function gs_current_pathname() {
+        let p = location.pathname;
+        if (p.endsWith('/')) {
+            p = p + 'index.html';
+        }
+        return p;
+    }
+
     function gs_set_loading() {
         document.getElementById('gsi-content').innerHTML = `<div class="block w-5 h-5">
 <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -128,10 +136,10 @@
     {% endfor %}
 </div>
 <script>
-    gs_set_current_chapter_uri(location.pathname.substring('{{ site.rootPath }}'.length));
+    gs_set_current_chapter_uri(gs_current_pathname().substring('{{ site.rootPath }}'.length));
     window.onpopstate = function (e) {
-        console.log(`pop state: ${location.pathname}`);
-        gs_load_chapter(location.pathname.substring('{{ site.rootPath }}'.length));
+        console.log(`pop state: ${gs_current_pathname()}`);
+        gs_load_chapter(gs_current_pathname().substring('{{ site.rootPath }}'.length));
     }
 </script>
 <!--// sidebar: book index -->
