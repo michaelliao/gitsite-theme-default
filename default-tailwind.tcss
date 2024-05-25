@@ -220,7 +220,7 @@ button[type=submit] {
     @apply my-4 leading-7
 }
 
-#gsi-content a[target="_blank"]:after {
+#gsi-content a[icon="external"]:after {
     @apply ml-[2px] w-4 h-4 inline-block content-[''];
 
     /* change a.text-color-xxx to bg-color-xxx */
