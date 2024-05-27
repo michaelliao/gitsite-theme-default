@@ -67,124 +67,126 @@
     <link rel="stylesheet" href="{{ site.rootPath }}/static/custom.css?t={{ __timestamp__}}">
 
     <script>
-        function isDarkMode() {
-            let colorScheme = localStorage.getItem('color-scheme');
-            if (colorScheme !== null) {
-                return colorScheme === 'dark';
-            }
-            // detect system dark mode:
-            return window.matchMedia !== undefined && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        }
+        window.gitsite = {
+            isDarkMode: function () {
+                let colorScheme = localStorage.getItem('color-scheme');
+                if (colorScheme !== null) {
+                    return colorScheme === 'dark';
+                }
+                // detect system dark mode:
+                return window.matchMedia !== undefined && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            },
 
-        function setDarkMode(isDark) {
-            console.log(`set color scheme: ${isDark ? 'dark' : 'light'}`);
-            localStorage.setItem('color-scheme', isDark ? 'dark' : 'light');
-            if (isDark) {
-                document.documentElement.classList.add('dark');
-                document.documentElement.classList.remove('light');
-            } else {
-                document.documentElement.classList.add('light');
-                document.documentElement.classList.remove('dark');
+            setDarkMode: function (isDark) {
+                console.log(`set color scheme: ${isDark ? 'dark' : 'light'}`);
+                localStorage.setItem('color-scheme', isDark ? 'dark' : 'light');
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.add('light');
+                    document.documentElement.classList.remove('dark');
+                }
+            },
+
+            setInnerHTML: function (dom, html) {
+                dom.innerHTML = html;
+                Array.from(dom.querySelectorAll('script'))
+                    .forEach(oldScriptEl => {
+                        const newScriptEl = document.createElement('script');
+                        Array.from(oldScriptEl.attributes).forEach(attr => {
+                            newScriptEl.setAttribute(attr.name, attr.value);
+                        });
+                        const scriptText = document.createTextNode(oldScriptEl.innerHTML);
+                        newScriptEl.appendChild(scriptText);
+                        oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+                    });
+            },
+
+            getOuterWidth: function (dom) {
+                const s = window.getComputedStyle(dom);
+                const t = parseFloat(s.width) + parseFloat(s.marginLeft) + parseFloat(s.marginRight);
+                return isNaN(t) ? 0 : Math.ceil(t);
+            },
+
+            showSearch: function () {
+                document.getElementById('gsi-search').classList.remove('hidden');
+                document.getElementById('gsi-search-input').focus();
+            },
+
+            hideSearch: function () {
+                document.getElementById('gsi-search').classList.add('hidden');
+            },
+
+            showOffcanvas: function () {
+                document.getElementById('gsi-offcanvas').classList.remove('hidden');
+                let indexDom = document.getElementById('gsi-index');
+                document.getElementById('gsi-offcanvas-index').prepend(indexDom);
+                window.gs_status.show_offcanvas = true;
+                const popup = document.getElementById('gsi-offcanvas-popup');
+                if (popup.animate) {
+                    popup.animate([{ left: "0px" }], 200).onfinish = () => popup.classList.add('gsc-offcanvas-popup-show');
+                } else {
+                    // animation not supported:
+                    popup.classList.add('gsc-offcanvas-popup-show');
+                }
+            },
+
+            hideOffcanvas: function () {
+                document.getElementById('gsi-offcanvas').classList.add('hidden');
+                document.getElementById('gsi-offcanvas-popup').classList.remove('gsc-offcanvas-popup-show');
+                let indexDom = document.getElementById('gsi-index');
+                document.getElementById('gsi-sidebar').prepend(indexDom);
+                window.gs_status.show_offcanvas = false;
+            },
+
+            initPopupMenu: function (dom) {
+                const popup = dom.nextElementSibling;
+                if (popup && popup.classList.contains('gsc-popup-menu-container')) {
+                    console.log('init popup menu: ' + dom);
+                    popup.tabIndex = 0;
+                    dom.addEventListener('mouseenter', function () {
+                        popup.classList.remove('hidden');
+                        popup.__focus = false;
+                    });
+                    dom.addEventListener('mouseleave', function () {
+                        setTimeout(function () {
+                            if (!popup.__focus) {
+                                popup.classList.add('hidden');
+                            }
+                        }, 250);
+                    });
+                    dom.addEventListener('click', (e) => {
+                        if (popup.__focus) {
+                            popup.classList.add('hidden');
+                            popup.__focus = false;
+                        } else {
+                            popup.classList.remove('hidden');
+                            popup.__focus = true;
+                            popup.focus();
+                        }
+                    });
+                    popup.addEventListener('mouseenter', (e) => {
+                        popup.__focus = true;
+                    });
+                    popup.addEventListener('mouseleave', (e) => {
+                        popup.classList.add('hidden');
+                        popup.__focus = false;
+                    });
+                    popup.addEventListener('focusout', (e) => {
+                        popup.classList.add('hidden');
+                        popup.__focus = false;
+                    })
+                } else {
+                    console.warn('cannot init popup menu: ' + dom);
+                }
             }
-        }
+        };
 
         // set dark mode immediately:
         (function () {
-            setDarkMode(isDarkMode());
+            gitsite.setDarkMode(gitsite.isDarkMode());
         })();
-
-        function setInnerHTML(dom, html) {
-            dom.innerHTML = html;
-            Array.from(dom.querySelectorAll('script'))
-                .forEach(oldScriptEl => {
-                    const newScriptEl = document.createElement('script');
-                    Array.from(oldScriptEl.attributes).forEach(attr => {
-                        newScriptEl.setAttribute(attr.name, attr.value);
-                    });
-                    const scriptText = document.createTextNode(oldScriptEl.innerHTML);
-                    newScriptEl.appendChild(scriptText);
-                    oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
-                });
-        }
-
-        function getOuterWidth(dom) {
-            const s = window.getComputedStyle(dom);
-            const t = parseFloat(s.width) + parseFloat(s.marginLeft) + parseFloat(s.marginRight);
-            return isNaN(t) ? 0 : Math.ceil(t);
-        }
-
-        function showSearch() {
-            document.getElementById('gsi-search').classList.remove('hidden');
-            document.getElementById('gsi-search-input').focus();
-        }
-
-        function hideSearch() {
-            document.getElementById('gsi-search').classList.add('hidden');
-        }
-
-        function showOffcanvas() {
-            document.getElementById('gsi-offcanvas').classList.remove('hidden');
-            let indexDom = document.getElementById('gsi-index');
-            document.getElementById('gsi-offcanvas-index').prepend(indexDom);
-            window.gs_status.show_offcanvas = true;
-            const popup = document.getElementById('gsi-offcanvas-popup');
-            if (popup.animate) {
-                popup.animate([{ left: "0px" }], 200).onfinish = () => popup.classList.add('gsc-offcanvas-popup-show');
-            } else {
-                // animation not supported:
-                popup.classList.add('gsc-offcanvas-popup-show');
-            }
-        }
-
-        function hideOffcanvas() {
-            document.getElementById('gsi-offcanvas').classList.add('hidden');
-            document.getElementById('gsi-offcanvas-popup').classList.remove('gsc-offcanvas-popup-show');
-            let indexDom = document.getElementById('gsi-index');
-            document.getElementById('gsi-sidebar').prepend(indexDom);
-            window.gs_status.show_offcanvas = false;
-        }
-
-        function initPopupMenu(dom) {
-            const popup = dom.nextElementSibling;
-            if (popup && popup.classList.contains('gsc-popup-menu-container')) {
-                console.log('init popup menu: ' + dom);
-                popup.tabIndex = 0;
-                dom.addEventListener('mouseenter', function () {
-                    popup.classList.remove('hidden');
-                    popup.__focus = false;
-                });
-                dom.addEventListener('mouseleave', function () {
-                    setTimeout(function () {
-                        if (!popup.__focus) {
-                            popup.classList.add('hidden');
-                        }
-                    }, 250);
-                });
-                dom.addEventListener('click', (e) => {
-                    if (popup.__focus) {
-                        popup.classList.add('hidden');
-                        popup.__focus = false;
-                    } else {
-                        popup.classList.remove('hidden');
-                        popup.__focus = true;
-                        popup.focus();
-                    }
-                });
-                popup.addEventListener('mouseenter', (e) => {
-                    popup.__focus = true;
-                });
-                popup.addEventListener('mouseleave', (e) => {
-                    popup.classList.add('hidden');
-                    popup.__focus = false;
-                });
-                popup.addEventListener('focusout', (e) => {
-                    popup.classList.add('hidden');
-                    popup.__focus = false;
-                })
-            } else {
-                console.warn('cannot init popup menu: ' + dom);
-            }
-        }
 
         // equivalent of $(document).ready(fn):
         function documentReady(fn) {
@@ -215,7 +217,7 @@
             console.log('init popup menu...');
             const doms = document.querySelectorAll('.gsc-popup-menu');
             for (let dom of doms) {
-                initPopupMenu(dom);
+                gitsite.initPopupMenu(dom);
             }
         });
 
@@ -235,13 +237,13 @@
                         menuItems = document.querySelectorAll('#gsi-nav-menu>li.gsc-nav-li'),
                         widthOfItems = [];
                     menuItems.forEach((dom) => {
-                        widthOfItems.push(getOuterWidth(dom));
+                        widthOfItems.push(gitsite.getOuterWidth(dom));
                     });
                     info = {
                         menuItems: menuItems,
                         moreItems: document.querySelectorAll('#gsi-nav-menu-more div.gsc-popup-menu-container ul>li'),
-                        widthOfLogo: getOuterWidth(document.querySelector('#gsi-nav-menu li.gsc-nav-logo')),
-                        widthOfMore: getOuterWidth(document.querySelector('#gsi-nav-menu li#gsi-nav-menu-more')),
+                        widthOfLogo: gitsite.getOuterWidth(document.querySelector('#gsi-nav-menu li.gsc-nav-logo')),
+                        widthOfMore: gitsite.getOuterWidth(document.querySelector('#gsi-nav-menu li#gsi-nav-menu-more')),
                         widthOfItems: widthOfItems,
                         totalWidthOfItems: widthOfItems.reduce((s, x) => s + x, 0)
                     };
@@ -281,6 +283,7 @@
     <script src="{{ site.rootPath }}/static/abcjs-init.js"></script>
     {% block script %}
     {% endblock %}
+    <script src="{{ site.rootPath }}/static/custom.js?t={{ __timestamp__}}"></script>
 </head>
 
 <body class="gsc-text gsc-bg">
@@ -293,7 +296,7 @@
                         <ul id="gsi-nav-menu-small" class="max-md:flex md:hidden">
                             {% if sidebar %}
                             <li class="mr-4 list-item">
-                                <a href="#0" onclick="showOffcanvas();return false;"
+                                <a href="#0" onclick="gitsite.showOffcanvas();return false;"
                                     class="block py-4 border-b-2 border-transparent">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -388,7 +391,7 @@
                     <nav class="gsc-nav gsc-nav-right font-semibold">
                         <ul class="flex space-x-4">
                             <!-- search -->
-                            <li><a class="inline-block py-4" href="#0" onclick="showSearch();return false;">
+                            <li><a class="inline-block py-4" href="#0" onclick="gitsite.showSearch();return false;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="inline-block w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -399,7 +402,8 @@
                             <!--// search -->
                             <!-- light mode -->
                             <li class="gsc-hidden-on-dark">
-                                <a class="inline-block py-4" href="#0" onclick="setDarkMode(true);return false;">
+                                <a class="inline-block py-4" href="#0"
+                                    onclick="gitsite.setDarkMode(true);return false;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="inline-block w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -410,7 +414,8 @@
                             <!--// light mode -->
                             <!-- dark mode -->
                             <li class="gsc-hidden-on-light">
-                                <a class="inline-block py-4" href="#0" onclick="setDarkMode(false);return false;">
+                                <a class="inline-block py-4" href="#0"
+                                    onclick="gitsite.setDarkMode(false);return false;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="inline-block w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -433,13 +438,14 @@
         </div>
     </div>
 
-    <div id="gsi-offcanvas" onclick="hideOffcanvas()" class="hidden gsc-backdrop">
+    <div id="gsi-offcanvas" onclick="gitsite.hideOffcanvas()" class="hidden gsc-backdrop">
         <div id="gsi-offcanvas-popup" onclick="event.stopPropagation()" class="gsc-popup-container gsc-offcanvas-popup">
             <div id="gsi-offcanvas-index"></div>
         </div>
     </div>
 
-    <div id="gsi-search" onclick="hideSearch()" class="hidden gsc-backdrop z-30 fixed top-0 left-0 right-0 bottom-0">
+    <div id="gsi-search" onclick="gitsite.hideSearch()"
+        class="hidden gsc-backdrop z-30 fixed top-0 left-0 right-0 bottom-0">
         <div class="gsc-container">
             <div onclick="event.stopPropagation()"
                 class="gsc-popup-container flex flex-col border shadow rounded-md fixed top-8 left-6 right-6 bottom-8 sd:top-12 sd:left-8 sd:right-8 sd:bottom-12 md:top-16 md:left-12 md:right-12 md:bottom-16">

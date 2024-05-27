@@ -65,7 +65,7 @@
         }
         console.log(`try load new chapter: ${uri}`);
         if (window.gs_status.show_offcanvas) {
-            hideOffcanvas();
+            gitsite.hideOffcanvas();
         }
         gs_set_loading();
         window.gs_status.current_chapter_version++;
@@ -73,7 +73,7 @@
         gs_load_chapter_content(uri).then((html) => {
             if (version === window.gs_status.current_chapter_version) {
                 console.log(`loaded ok: ${uri}`);
-                setInnerHTML(document.querySelector('#gsi-content'), html);
+                gitsite.setInnerHTML(document.querySelector('#gsi-content'), html);
                 document.title = document.querySelector('#gsi-chapter-title h1').innerHTML + ' - ' + window.gs_status.title_suffix;
             }
         }).catch(err => {
