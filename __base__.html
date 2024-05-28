@@ -89,6 +89,25 @@
                 }
             },
 
+            addContentChangedListener: function (callback) {
+                if (window.gitsite._contentChangedListeners === undefined) {
+                    window.gitsite._contentChangedListeners = [];
+                }
+                window.gitsite._contentChangedListeners.push(callback);
+            },
+
+            triggerContentChangedListener: function () {
+                if (window.gitsite._contentChangedListeners) {
+                    for (let listener of window.gitsite._contentChangedListeners) {
+                        try {
+                            listener();
+                        } catch (err) {
+                            console.error(`error when trigger content changed listener: ${listener}`);
+                        }
+                    }
+                }
+            },
+
             setInnerHTML: function (dom, html) {
                 dom.innerHTML = html;
                 Array.from(dom.querySelectorAll('script'))

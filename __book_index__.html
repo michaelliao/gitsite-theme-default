@@ -75,6 +75,7 @@
                 console.log(`loaded ok: ${uri}`);
                 gitsite.setInnerHTML(document.querySelector('#gsi-content'), html);
                 document.title = document.querySelector('#gsi-chapter-title h1').innerHTML + ' - ' + window.gs_status.title_suffix;
+                gitsite.triggerContentChangedListener();
             }
         }).catch(err => {
             console.error(err);
