@@ -446,7 +446,7 @@ button[type=submit] {
 }
 
 #gsi-content div.question button.question {
-    @apply px-2 py-1 mr-2 text-sm rounded border border-sky-600 text-sky-500;
+    @apply px-2 py-1 mr-2 text-sm rounded border border-sky-600;
 }
 
 #gsi-content div.question span.question.correct {
