@@ -39,11 +39,11 @@
     </script>
 
     <link rel="stylesheet" href="{{ site.rootPath }}/static/highlight.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="{{ site.cdnPath }}/katex@0.16.9/dist/katex.min.css">
     <style>
         @font-face {
             font-family: "JetBrainsMono";
-            src: url("https://cdn.jsdelivr.net/npm/jetbrains-mono@1.0.6/fonts/webfonts/JetBrainsMono-Regular.woff2");
+            src: url("{{ site.cdnPath }}/jetbrains-mono@1.0.6/fonts/webfonts/JetBrainsMono-Regular.woff2");
         }
     </style>
 
@@ -91,6 +91,29 @@
 
             encodeHtml: function (s) {
                 return s.replaceAll(/\&/g, '&amp;').replaceAll(/\</g, '&lt;').replaceAll(/\>/g, '&gt;');
+            },
+
+            loadScript: function (url, onloaded, isAsync) {
+                if (window._loaded_js_ === undefined) {
+                    window._loaded_js_ = {};
+                }
+                if (!window._loaded_js_[url]) {
+                    console.log(`load script: ${url}`);
+                    let e = document.createElement('script');
+                    e.src = url;
+                    e.type = 'text/javascript';
+                    if (onloaded) {
+                        e.addEventListener('load', onloaded);
+                    }
+                    if (isAsync) {
+                        e.async = true;
+                    }
+                    document.getElementsByTagName('head')[0].appendChild(e);
+                    window._loaded_js_[url] = true;
+                } else {
+                    // script already loaded:
+                    onloaded && onloaded();
+                }
             },
 
             addContentChangedListener: function (callback) {
