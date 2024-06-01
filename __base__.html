@@ -21,16 +21,7 @@
     <!-- request path: {{ __uri__ }} -->
     <title>{% block title %} title {% endblock %}</title>
 
-    {% if site.integration and site.integration.googleAnalytics %}
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.integration.googleAnalytics }}"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', '{{ site.integration.googleAnalytics }}');
-    </script>
-    {% endif %}
+    {% include "__analytics__.html" %}
 
     <script>
         // global status:

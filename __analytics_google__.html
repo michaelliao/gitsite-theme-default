@@ -1,0 +1,13 @@
+<!-- google analytics -->
+{% if site.integration.analytics.gtag %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.integration.analytics.gtag }}"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', '{{ site.integration.analytics.gtag }}');
+</script>
+{% else %}
+<!-- ERROR: missing site.integration.analytics.gtag -->
+{% endif %}
+<!--// google analytics -->
