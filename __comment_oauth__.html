@@ -145,7 +145,7 @@
                 }).then(resp => {
                     resp.json().then(obj => {
                         if (obj.error) {
-                            console.error(obj.message || obj.error);
+                            console.error(obj.error, obj.message);
                             err.innerHTML = (obj.message || obj.error).toString();
                         } else {
                             console.log('post comment ok.');
