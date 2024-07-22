@@ -29,6 +29,7 @@
 <script>
     if (window.gitsite_comment === undefined) {
         (function () {
+            const MAX_COMMENT_HEIGHT = 400;
             // begin function
             function _comment_set_token(token, user, expires) {
                 localStorage.setItem('_comment_token_', token);
@@ -52,7 +53,7 @@
                 return localStorage.getItem('_comment_token_');
             }
 
-            function _comment_markdown_render(text) {
+            function _comment_markdown_render(text, autoCollapse = true) {
                 const md = markdownit();
                 const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
                     return self.renderToken(tokens, idx, options);
@@ -60,9 +61,13 @@
                 md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
                     // Add a new `target` attribute, or replace the value of the existing one.
                     tokens[idx].attrSet('target', '_blank');
+                    tokens[idx].attrSet('rel', 'nofollow');
                     // Pass the token to the default renderer.
                     return defaultRender(tokens, idx, options, env, self);
                 };
+                if (autoCollapse) {
+                    return '<div class="x-auto-collapse">' + md.render(text) + '</div>';
+                }
                 return md.render(text);
             }
 
@@ -206,7 +211,7 @@
                 form.querySelector('div.comment-form-edit').style.display = 'none';
                 const preview = form.querySelector('div.comment-form-preview');
                 const text = form.querySelector('textarea').value.trim() || '(empty)';
-                preview.innerHTML = _comment_markdown_render(text);
+                preview.innerHTML = _comment_markdown_render(text, false);
                 preview.style.display = 'block';
             }
 
@@ -317,6 +322,31 @@
                 }
                 commentThread.querySelector('div.comment-loading').style.display = 'none';
                 commentThread.querySelector('div.comment-topics').innerHTML = html;
+                commentThread.querySelectorAll('div.comment-topics div.x-auto-collapse').forEach(div => {
+                    if (div.scrollHeight <= MAX_COMMENT_HEIGHT + 60) {
+                        return;
+                    }
+                    div.style.maxHeight = MAX_COMMENT_HEIGHT + 'px';
+                    div.style.overflow = 'hidden';
+                    let p = document.createElement('p');
+                    p.innerHTML = '<a href="#0" class="x-read-more">Read More ▼</a><a href="#0" class="x-collapse" style="display:none">Collapse ▲</a>';
+                    div.parentNode.appendChild(p);
+                    const aReadMore = p.querySelector('a.x-read-more');
+                    const aCollapse = p.querySelector('a.x-collapse');
+                    aReadMore.onclick = () => {
+                        div.style.maxHeight = null;
+                        div.style.overflow = null;
+                        aReadMore.style.display = 'none';
+                        aCollapse.style.display = null;
+                    };
+                    aCollapse.onclick = () => {
+                        div.style.maxHeight = MAX_COMMENT_HEIGHT + 'px';
+                        div.style.overflow = 'hidden';
+                        aReadMore.style.display = null;
+                        aCollapse.style.display = 'none';
+                        div.parentNode.parentNode.scrollIntoView();
+                    };
+                });
                 if (scroll) {
                     commentThread.scrollIntoView();
                 }
