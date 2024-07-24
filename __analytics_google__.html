@@ -8,6 +8,15 @@
     gtag('config', '{{ site.integration.analytics.gtag }}');
 </script>
 {% else %}
-<!-- ERROR: missing site.integration.analytics.gtag -->
+<!--
+ERROR: missing site.integration.analytics.gtag
+Example site.yml:
+
+site:
+  integration:
+    analytics:
+      provider: google
+      gtag: G-A1B2C3D4
+-->
 {% endif %}
 <!--// google analytics -->
