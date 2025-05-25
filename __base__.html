@@ -51,6 +51,11 @@
         tailwind.config = {
             darkMode: 'class'
         }
+        // {% if __pdf__ %}
+        window.__pdf__ = true;
+        // {% else %}
+        window.__pdf__ = false;
+        // {% endif %}
     </script>
     <style type="text/tailwindcss">
         {% include "default-tailwind.tcss" %}
@@ -63,7 +68,9 @@
     <script>
         window.gitsite = {
             isDarkMode: function () {
-                {% if __disable_dark_mode__ %} return false; {% endif %}
+                if (window.__pdf__) {
+                    return false;
+                }
                 let colorScheme = localStorage.getItem('color-scheme');
                 if (colorScheme !== null) {
                     return colorScheme === 'dark';
@@ -88,6 +95,7 @@
                 return s.replaceAll(/\&/g, '&amp;').replaceAll(/\</g, '&lt;').replaceAll(/\>/g, '&gt;');
             },
 
+            // load script only once:
             loadScript: function (url, onloaded, isAsync) {
                 if (window._loaded_js_ === undefined) {
                     window._loaded_js_ = {};
