@@ -18,10 +18,19 @@
         break-after: page;
     }
 
+    .pdf-toc {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
     #gsi-content pre.hljs {
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         white-space: pre-wrap !important;
+    }
+
+    pre.ascii {
+        break-inside: avoid-page;
     }
 </style>
 <script>
@@ -36,9 +45,14 @@ documentReady(function() {
             }
         });
     };
+
+    document.querySelectorAll('img').forEach(function(img) {
+        img.setAttribute('loading', 'eager');
+    });
+
     document.querySelectorAll('div.pdf-page').forEach(function(pdfPage) {
         let baseUri = pdfPage.getAttribute('data-base-uri');
-        if (baseUri.startsWith(pdfUri)) {
+        if (baseUri && baseUri.startsWith(pdfUri)) {
             // pdfUri = /books/hello/
             // baseUri = /books/hello/chapter1/
             // relativeUri = chapter1/
@@ -54,8 +68,13 @@ documentReady(function() {
 {% block main %}
 <div id="pdf-content">
     <div id="gsi-content">
-        <h1>{{ book.title }}</h1>
-        {{ pdf.toc | safe }}
+        <div id="pdf-toc" class="pdf-page">
+            <a name="pdf-toc"></a>
+            <h1 class="pdf-page-title">Index</h1>
+        {% for t in pdf.toc %}
+            <div class="pdf-toc pdf-toc-{{ t.level }}" style="margin-left:{{ t.level-1 }}rem;">{{ t.marker }}. <a href="#{{ t.id }}">{{ t.title }}</a></div>
+        {% endfor %}
+        </div>
         {{ pdf.content | safe }}
     </div>
 </div>
