@@ -36,6 +36,9 @@
             font-family: "JetBrainsMono";
             src: url("{{ site.cdnPath }}/jetbrains-mono@1.0.6/fonts/webfonts/JetBrainsMono-Regular.woff2");
         }
+        .pdf-only {
+            display: none;
+        }
     </style>
 
     {% if __mode__ == 'build' %}
@@ -60,6 +63,7 @@
     <script>
         window.gitsite = {
             isDarkMode: function () {
+                {% if __disable_dark_mode__ %} return false; {% endif %}
                 let colorScheme = localStorage.getItem('color-scheme');
                 if (colorScheme !== null) {
                     return colorScheme === 'dark';
@@ -324,7 +328,7 @@
 </head>
 
 <body class="gsc-text gsc-bg">
-    <div id="gsi-header" class="gsc-bg border-b gsc-border">
+    <div id="gsi-header" class="pdf-hidden gsc-bg border-b gsc-border">
         <div class="gsc-container">
             <div id="gsi-header-nav" class="relative flex items-center">
                 <div id="gsi-header-nav-main" class="relative flex items-center mr-auto">

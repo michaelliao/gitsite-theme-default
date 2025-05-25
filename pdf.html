@@ -1,0 +1,62 @@
+{% extends "__base__.html" %}
+
+{% block title %}
+    {{ book.title }} - {{ site.title }}
+{% endblock %}
+
+{% block script %}
+<style>
+    .pdf-hidden {
+        display: none !important;
+    }
+
+    .pdf-only {
+        display: revert !important;
+    }
+
+    .pdf-page {
+        break-after: page;
+    }
+
+    #gsi-content pre.hljs {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: pre-wrap !important;
+    }
+</style>
+<script>
+documentReady(function() {
+    const pdfUri = '{{ __uri__ }}';
+    const updateSrc = function(relativeUri, pdfPage, selector, attr) {
+        pdfPage.querySelectorAll(selector).forEach(function(el) {
+            let src = el.getAttribute(attr);
+            if (src && !src.startsWith('http://') && !src.startsWith('https://') && !src.startsWith('data:') && !src.startsWith('/')) {
+                src = relativeUri + src;
+                el.setAttribute(attr, src);
+            }
+        });
+    };
+    document.querySelectorAll('div.pdf-page').forEach(function(pdfPage) {
+        let baseUri = pdfPage.getAttribute('data-base-uri');
+        if (baseUri.startsWith(pdfUri)) {
+            // pdfUri = /books/hello/
+            // baseUri = /books/hello/chapter1/
+            // relativeUri = chapter1/
+            let relativeUri = baseUri.substring(pdfUri.length);
+            updateSrc(relativeUri, pdfPage, 'img', 'src');
+            updateSrc(relativeUri, pdfPage, 'image', 'href');
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block main %}
+<div id="pdf-content">
+    <div id="gsi-content">
+        <h1>{{ book.title }}</h1>
+        {{ pdf.toc | safe }}
+        {{ pdf.content | safe }}
+    </div>
+</div>
+{% endblock %}

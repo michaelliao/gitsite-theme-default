@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Cover</title>
+    <style>
+body {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    background-image:  linear-gradient(#d6f0fa 2px, transparent 2px), linear-gradient(90deg, #d6f0fa 2px, transparent 2px), linear-gradient(#d6f0fa 1px, transparent 1px), linear-gradient(90deg, #d6f0fa 1px, #ffffff 1px);
+    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    background-repeat: repeat;
+}
+
+div.content {
+    margin: 0;
+    padding: 0;
+}
+
+div.image {
+    background-image: url("{{ imageUrl }}");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: 80mm;
+    margin-top: 40mm;
+    margin-bottom: 20mm;
+}
+
+div.title {
+    margin-bottom: 10mm;
+    padding: 15mm 10mm;
+    font-size: 72px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #0c6c95;
+}
+
+div.description {
+    margin: 0 0;
+    padding: 5mm 10mm;
+    font-size: 32px;
+    line-height: 48px;
+    text-align: center;
+}
+
+div.author {
+    margin: 0;
+    padding: 5mm 10mm;
+    font-size: 32px;
+    text-align: center;
+}
+
+div.url {
+    margin-top: 10mm;
+    padding: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
+    font-size: 24px;
+    text-align: center;
+}
+
+div.version {
+    margin-top: 10mm;
+    padding: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
+    font-size: 24px;
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="image"></div>
+        <div class="title">{{ title }}</div>
+        <div class="description">{{ description }}</div>
+        <div class="author">{{ author }}</div>
+        <div class="url"><a href="{{ url }}" style="color:rgb(2,132,199); text-decoration:none;">{{ url }}</a></div>
+        <div class="version">{{ version }}</div>
+    </div>
+</body>
+</html>
