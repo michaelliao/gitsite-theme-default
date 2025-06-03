@@ -385,5 +385,9 @@ Temporary Items
 _site/
 _site_*/
 
+# Ignore package.json for node_modules are installed by need:
+package.json
+package-lock.json
+
 !.gitignore
 !.gitsubmodules
