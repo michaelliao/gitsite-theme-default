@@ -1,7 +1,7 @@
 {% extends "__base__.html" %}
 
 {% block title %}
-    {{ book.title }} - {{ site.title }}
+    {{ pdf.title }} - {{ site.title }}
 {% endblock %}
 
 {% block script %}
@@ -72,7 +72,7 @@ documentReady(function() {
             <a name="pdf-toc"></a>
             <h1 class="pdf-page-title">Index</h1>
         {% for t in pdf.toc %}
-            <div class="pdf-toc pdf-toc-{{ t.level }}" style="margin-left:{{ t.level-1 }}rem;">{{ t.marker }}. <a href="#{{ t.id }}">{{ t.title }}</a></div>
+            <div class="pdf-toc pdf-toc-{{ t.level }}" style="margin-left:{{ t.level-1 }}rem;">{{ t.marker }} <a href="#{{ t.id }}">{{ t.title }}</a></div>
         {% endfor %}
         </div>
         {{ pdf.content | safe }}
