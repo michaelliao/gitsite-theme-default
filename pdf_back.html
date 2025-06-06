@@ -57,28 +57,54 @@ div.author {
 div.url {
     margin-bottom: 10mm;
     padding: 0 10mm;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
     font-size: 24px;
     text-align: left;
+}
+
+div.url a {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
 }
 
 div.version {
     margin-bottom: 10mm;
     padding: 0 10mm;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
     font-size: 24px;
     text-align: left;
 }
+
+div.version span.version {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
+}
     </style>
+{% include "__pdf_i18n__.html" %}
+<script>
+function documentReady(fn) {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(fn, 0);
+    } else {
+        document.addEventListener('DOMContentLoaded', fn);
+    }
+}
+documentReady(function() {
+    const lang = '{{ language }}';
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        let s = el.innerText;
+        let t = pdfI18n(s, lang);
+        if (s !== t) {
+            el.innerText = t;
+        }
+    });
+});
+</script>
 </head>
 <body>
     <div class="content">
         <div class="image"></div>
         <div class="title">{{ title }}</div>
         <div class="description">{{ description }}</div>
-        <div class="author">{{ author }}</div>
-        <div class="url">Website: <a href="{{ url }}" style="color:rgb(2,132,199); text-decoration:none;">{{ url }}</a></div>
-        <div class="version">Version: {{ version }}</div>
+        <div class="author"><span data-i18n>Author</span>: {{ author }}</div>
+        <div class="url"><span data-i18n>Website</span>: <a href="{{ url }}" style="color:rgb(2,132,199); text-decoration:none;">{{ url }}</a></div>
+        <div class="version"><span data-i18n>Version</span>: <span class="version">{{ version }}</span></div>
     </div>
 </body>
 </html>

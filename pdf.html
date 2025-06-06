@@ -18,6 +18,12 @@
         break-after: page;
     }
 
+    .pdf-page-url {
+        font-size: 0.8rem;;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
     .pdf-toc {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -33,15 +39,33 @@
         break-inside: avoid-page;
     }
 </style>
+{% include "__pdf_i18n__.html" %}
 <script>
 documentReady(function() {
     const pdfUri = '{{ __uri__ }}';
-    const updateSrc = function(relativeUri, pdfPage, selector, attr) {
+    const domain = '{{ site.domain }}';
+    const lang = '{{ site.language }}';
+    const pdfPath = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
+    const updateImageSrc = function(relativeUri, pdfPage, selector, attr) {
         pdfPage.querySelectorAll(selector).forEach(function(el) {
             let src = el.getAttribute(attr);
             if (src && !src.startsWith('http://') && !src.startsWith('https://') && !src.startsWith('data:') && !src.startsWith('/')) {
                 src = relativeUri + src;
                 el.setAttribute(attr, src);
+            }
+        });
+    };
+    const updateAHref = function(relativeUri, pdfPage, selector) {
+        pdfPage.querySelectorAll(selector).forEach(function(el) {
+            let href = el.getAttribute('href');
+            if (href && !href.startsWith('http://') && !href.startsWith('https://')) {
+                if (href.startsWith('/')) {
+                    href = domain + href;
+                } else {
+                    href = domain + pdfPath + relativeUri + href;
+
+                }
+                el.setAttribute('href', href);
             }
         });
     };
@@ -57,8 +81,17 @@ documentReady(function() {
             // baseUri = /books/hello/chapter1/
             // relativeUri = chapter1/
             let relativeUri = baseUri.substring(pdfUri.length);
-            updateSrc(relativeUri, pdfPage, 'img', 'src');
-            updateSrc(relativeUri, pdfPage, 'image', 'href');
+            updateImageSrc(relativeUri, pdfPage, 'img', 'src');
+            updateImageSrc(relativeUri, pdfPage, 'image', 'href');
+            updateAHref(relativeUri, pdfPage, 'a');
+        }
+    });
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        let s = el.innerText;
+        let t = pdfI18n(s, lang);
+        if (s !== t) {
+            el.innerText = t;
         }
     });
 });
@@ -70,7 +103,7 @@ documentReady(function() {
     <div id="gsi-content">
         <div id="pdf-toc" class="pdf-page">
             <a name="pdf-toc"></a>
-            <h1 class="pdf-page-title">Index</h1>
+            <h1 class="pdf-page-title" data-i18n>Index</h1>
         {% for t in pdf.toc %}
             <div class="pdf-toc pdf-toc-{{ t.level }}" style="margin-left:{{ t.level-1 }}rem;">{{ t.marker }} <a href="#{{ t.id }}">{{ t.title }}</a></div>
         {% endfor %}
