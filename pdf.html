@@ -19,7 +19,6 @@
     }
 
     .pdf-page-url {
-        font-size: 0.8rem;;
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
     }
@@ -108,7 +107,15 @@ documentReady(function() {
             <div class="pdf-toc pdf-toc-{{ t.level }}" style="margin-left:{{ t.level-1 }}rem;">{{ t.marker }} <a href="#{{ t.id }}">{{ t.title }}</a></div>
         {% endfor %}
         </div>
-        {{ pdf.content | safe }}
+        {% for c in pdf.chapters %}
+        <div id="div-{{ c.id }}" class="pdf-page" data-base-uri="{{ c.baseUrl }}">
+            <a name="{{ c.id }}"></a>
+            <h1 class="pdf-page-title">{{ c.title }}</h1>
+            <div class="pdf-page-url"><a href="{{ c.url }}" data-i18n>Original URL</a></div>
+            {{ c.content | safe }}
+            <div class="pdf-page-url"><a href="{{ c.url }}#comments" data-i18n>Comments</a></div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
