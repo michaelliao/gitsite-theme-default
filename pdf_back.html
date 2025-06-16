@@ -76,7 +76,7 @@ div.version span.version {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;;
 }
     </style>
-{% include "__pdf_i18n__.html" %}
+{% include "__i18n__.html" %}
 <script>
 function documentReady(fn) {
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -89,7 +89,7 @@ documentReady(function() {
     const lang = '{{ language }}';
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
         let s = el.innerText;
-        let t = pdfI18n(s, lang);
+        let t = i18n(s, lang);
         if (s !== t) {
             el.innerText = t;
         }

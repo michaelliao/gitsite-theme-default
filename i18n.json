@@ -1,0 +1,26 @@
+{
+    "zh-CN": {
+        "author": "作者",
+        "index": "目录",
+        "original url": "原文链接",
+        "version": "版本",
+        "website": "网站",
+        "comments": "评论"
+    },
+    "zh-TW": {
+        "author": "作者",
+        "index": "目錄",
+        "original url": "​原始網址",
+        "version": "版本",
+        "website": "網站",
+        "comments": "評論"
+    },
+    "ja-JP": {
+        "author": "著者",
+        "index": "目次",
+        "original url": "元のURL",
+        "version": "バージョン",
+        "website": "Webサイト",
+        "comments": "コメント"
+    }
+}

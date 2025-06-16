@@ -38,7 +38,7 @@
         break-inside: avoid-page;
     }
 </style>
-{% include "__pdf_i18n__.html" %}
+{% include "__i18n__.html" %}
 <script>
 documentReady(function() {
     const pdfUri = '{{ __uri__ }}';
@@ -88,7 +88,7 @@ documentReady(function() {
 
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
         let s = el.innerText;
-        let t = pdfI18n(s, lang);
+        let t = i18n(s, lang);
         if (s !== t) {
             el.innerText = t;
         }
@@ -109,8 +109,7 @@ documentReady(function() {
         </div>
         {% for c in pdf.chapters %}
         <div id="div-{{ c.id }}" class="pdf-page" data-base-uri="{{ c.baseUrl }}">
-            <a name="{{ c.id }}"></a>
-            <h1 class="pdf-page-title">{{ c.title }}</h1>
+            <h1 id="{{ c.id }}" class="pdf-page-title">{{ c.title }}</h1>
             <div class="pdf-page-url"><a href="{{ c.url }}" data-i18n>Original URL</a></div>
             {{ c.content | safe }}
             <div class="pdf-page-url"><a href="{{ c.url }}#comments" data-i18n>Comments</a></div>
