@@ -328,8 +328,10 @@
             resizeNavigationMenu();
         });
     </script>
+    {% if site.integration and site.integration.abcjs and not site.integration.abcjs.disable %}
     <script src="{{ site.cdnPath }}/abcjs@6.2.0/dist/abcjs-basic-min.js"></script>
     <script src="{{ site.rootPath }}/static/abcjs-init.js"></script>
+    {% endif %}
     {% block script %}
     {% endblock %}
     <script src="{{ site.rootPath }}/static/custom.js"></script>
