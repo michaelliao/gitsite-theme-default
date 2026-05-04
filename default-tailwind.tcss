@@ -120,7 +120,7 @@ nav.gsc-nav-main > ul > li > a.gsc-active {
 }
 
 #gsi-index div.gsc-index-item > a > span.gsc-index-item-action {
-    @apply cursor-pointer w-3 h-3 block absolute right-1 mx-1 top-1/2;
+    @apply cursor-pointer w-3 h-3 mr-2 block absolute right-1 mx-1 top-1/2;
     transform: translateY(-50%);
 }
 
